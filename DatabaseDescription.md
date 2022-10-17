@@ -4,27 +4,27 @@
 - userID
 - userEmail
 - userZIP (optional)
- - Used for extreme weather notification (only available in USA)
+  - Used for extreme weather notification (only available in USA)
 
 ## Houseplant collection
 - plantID
 - plantUserName
- - Allows user to pick a name for their plant
+  - Allows user to pick a name for their plant
 - plantLatinName (optional)
- - Species and subspieces if relevant
+  - Species and subspieces if relevant
 - plantCommonName (optional)
- - Common name for plant species
+  - Common name for plant species
 - plantSource (optional)
- - Allows user to track where they purchased the plant or seed
+  - Allows user to track where they purchased the plant or seed
 
 ## HouseplantUpdate collection
 - plantID
- - Matches plantID from Houseplant collection
+  - Matches plantID from Houseplant collection
 - date
 - plantHeight (optional)
 - plantWidth (optional)
 - health (optional)
- - user picks 1-10 based on how healthy the plant looks
+  - user picks 1-10 based on how healthy the plant looks
 - comment (optional)
 
 ## PlantInfo collection
