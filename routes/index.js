@@ -20,14 +20,14 @@ mongoose.connect(dbURI, options).then(
   }
 )
 
-// for this version, we will keep data on server in an array
-userPlantArray =  [{plantUserName: "test"}];
-
 router.get('/userplant', function(req, res) {
-  userPlantArray.forEach(plant => {
-    console.log(plant.plantUserName);
-  });
-  res.status(200).json(userPlantArray);
+  UserPlant.find({}, (err, userPlants) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+    }
+    res.status(200).json(userPlants);
+  });;
 })
 
 // router.get('/heroes/:id', function(req, res) {
