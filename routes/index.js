@@ -3,6 +3,7 @@ var router = express.Router();
 
 const mongoose = require("mongoose");
 const UserPlant = require("../UserPlant");
+const UpdatePlant = require("../UpdatePlant");
 const User = require("../User");
 const dbURI = require("../cstring");
 mongoose.set('useFindAndModify', false);
@@ -28,6 +29,15 @@ router.get('/userplant', function(req, res) {
     }
     res.status(200).json(userPlants);
   });;
+})
+
+updatePlantArray =  [{updateComment: "asdf"}];
+
+router.get('/updateplant', function(req, res) {
+  updatePlantArray.forEach(plant => {
+    console.log(plant.updateComment);
+  });
+  res.status(200).json(updatePlantArray);
 })
 
 // router.get('/heroes/:id', function(req, res) {
@@ -107,6 +117,23 @@ router.post('/userplant', function(req, res) {
   //userPlantArray.push(newPlant);
   newPlant.save();
   res.status(201).json(newPlant);
+});
+
+//update plant status
+//need to get unique plant id
+router.post('/updateplant', function(req, res) {
+  let oldUpdate = req.body;
+  console.log(oldUpdate.updateCurrentHeight);
+  console.log(oldUpdate.updateCurrentWidth);
+  let updatePlant = new UpdatePlant({
+    updateDate: oldUpdate.updateDate,
+    updateCurrentHeight: oldUpdate.updateCurrentHeight,
+    updateCurrentWidth: oldUpdate.updateCurrentWidth,
+    updateCurrentHealth: oldUpdate.updateCurrentHealth,
+    updateComment: oldUpdate.updateComment
+  });
+  updatePlant.save();
+  res.status(201).json(updatePlant);
 });
 
 module.exports = router;
