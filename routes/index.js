@@ -1,9 +1,10 @@
-
 var express = require('express');
 var router = express.Router();
 
 const mongoose = require("mongoose");
 const UserPlant = require("../UserPlant");
+const UpdatePlant = require("../UpdatePlant");
+const User = require("../User");
 const dbURI = require("../cstring");
 mongoose.set('useFindAndModify', false);
 const options = {
@@ -20,14 +21,23 @@ mongoose.connect(dbURI, options).then(
   }
 )
 
-// for this version, we will keep data on server in an array
-userPlantArray =  [{plantUserName: "test"}];
-
 router.get('/userplant', function(req, res) {
-  userPlantArray.forEach(plant => {
-    console.log(plant.plantUserName);
+  UserPlant.find({}, (err, userPlants) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send(err);
+    }
+    res.status(200).json(userPlants);
+  });;
+})
+
+updatePlantArray =  [{updateComment: "asdf"}];
+
+router.get('/updateplant', function(req, res) {
+  updatePlantArray.forEach(plant => {
+    console.log(plant.updateComment);
   });
-  res.status(200).json(userPlantArray);
+  res.status(200).json(updatePlantArray);
 })
 
 // router.get('/heroes/:id', function(req, res) {
@@ -109,6 +119,23 @@ router.post('/userplant', function(req, res) {
   res.status(201).json(newPlant);
 });
 
+//update plant status
+//need to get unique plant id
+router.post('/updateplant', function(req, res) {
+  let oldUpdate = req.body;
+  console.log(oldUpdate.updateCurrentHeight);
+  console.log(oldUpdate.updateCurrentWidth);
+  let updatePlant = new UpdatePlant({
+    updateDate: oldUpdate.updateDate,
+    updateCurrentHeight: oldUpdate.updateCurrentHeight,
+    updateCurrentWidth: oldUpdate.updateCurrentWidth,
+    updateCurrentHealth: oldUpdate.updateCurrentHealth,
+    updateComment: oldUpdate.updateComment
+  });
+  updatePlant.save();
+  res.status(201).json(updatePlant);
+});
+
 module.exports = router;
 
 //Create a unique ID using time + random
@@ -117,3 +144,50 @@ const uid = () =>
     Date.now().toString(32) +
       Math.random().toString(16)
   ).replace(/\./g, '');
+
+
+/* post a new User and push to Mongo */
+router.post('/newuser', function(req, res) {
+  // should verify user name not already in DB
+    let oneNewuser = new User(req.body);  
+    console.log(req.body);
+    console.log(oneNewuser);
+    oneNewuser.save((err, userValue) => {
+      if (err) {
+        res.status(500).send(err);
+      }
+      else {
+      console.log(userValue);
+      res.status(201).json(userValue);
+      }
+    });
+  });
+  
+  
+  /* using post to pass name - pw and return the object with _id if found */
+  router.post('/loginUser', function(req, res) {
+    let findName = req.body.userName;  
+    let findpw = req.body.pw;  
+    console.log(findName + " -- " + findpw);
+    User.find(
+      { userName: findName, pw: findpw },  
+      { completed: true },   // ignore the value of the object's completed prop, just force it to true
+      { new: false }, // if it does not find one, do not just make up a new one.
+      (err, data) => {
+        if (err) {
+          res.status(500).send(err);
+      }
+      if(data[0] != null) {
+        console.log("id found " + data); // mongo does not complain if not found!
+        res.status(200).json(data[0]._id);
+      }
+      else {
+        console.log("not found");
+        var notfound = 0;
+        res.status(200).json(notfound);
+      }
+      })
+  });
+  
+  
+  module.exports = router;
