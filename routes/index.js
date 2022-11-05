@@ -126,6 +126,8 @@ router.post('/updateplant', function(req, res) {
   console.log(oldUpdate.updateCurrentHeight);
   console.log(oldUpdate.updateCurrentWidth);
   let updatePlant = new UpdatePlant({
+    updateID: uid(),
+    plantID: oldUpdate.plantID,
     updateDate: oldUpdate.updateDate,
     updateCurrentHeight: oldUpdate.updateCurrentHeight,
     updateCurrentWidth: oldUpdate.updateCurrentWidth,
