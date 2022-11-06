@@ -21,6 +21,7 @@ mongoose.connect(dbURI, options).then(
   }
 )
 
+//Get all userplants for all user
 router.get('/userplant', function(req, res) {
   UserPlant.find({}, (err, userPlants) => {
     if (err) {
@@ -120,12 +121,13 @@ router.post('/userplant', function(req, res) {
 });
 
 //update plant status
-//need to get unique plant id
 router.post('/updateplant', function(req, res) {
   let oldUpdate = req.body;
-  console.log(oldUpdate.updateCurrentHeight);
-  console.log(oldUpdate.updateCurrentWidth);
+
+  //insert a new updatePlant into the updateplants collection
   let updatePlant = new UpdatePlant({
+    updateID: uid(),
+    plantID: oldUpdate.plantID,
     updateDate: oldUpdate.updateDate,
     updateCurrentHeight: oldUpdate.updateCurrentHeight,
     updateCurrentWidth: oldUpdate.updateCurrentWidth,
@@ -133,10 +135,21 @@ router.post('/updateplant', function(req, res) {
     updateComment: oldUpdate.updateComment
   });
   updatePlant.save();
+
+  //update an existing userPlant in the userplants collection
+  UserPlant.findOne({plantID: updatePlant.plantID}, function (err, userPlant){
+    if (err){
+      console.log(err);
+    } else {
+      userPlant.plantCurrentHeight = updatePlant.updateCurrentHeight;
+      userPlant.plantCurrentWidth = updatePlant.updateCurrentWidth;
+      userPlant.plantCurrentHealth = updatePlant.updateCurrentHealth;
+      userPlant.save();
+    }
+  });
+
   res.status(201).json(updatePlant);
 });
-
-module.exports = router;
 
 //Create a unique ID using time + random
 const uid = () =>
@@ -144,7 +157,6 @@ const uid = () =>
     Date.now().toString(32) +
       Math.random().toString(16)
   ).replace(/\./g, '');
-
 
 /* post a new User and push to Mongo */
 router.post('/newuser', function(req, res) {
@@ -188,6 +200,5 @@ router.post('/newuser', function(req, res) {
       }
       })
   });
-  
   
   module.exports = router;

@@ -3,6 +3,14 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const UpdatePlantSchema = new Schema ({
+    updateID: {
+        type: String,
+        required: true
+    }, 
+    plantID: {
+        type: String,
+        required: true
+    }, 
     updateDate: {
         type: String
     }, 
