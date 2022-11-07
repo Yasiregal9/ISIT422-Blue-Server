@@ -32,6 +32,7 @@ router.get('/userplant', function(req, res) {
   });;
 })
 
+
 updatePlantArray =  [{updateComment: "asdf"}];
 
 router.get('/updateplant', function(req, res) {
