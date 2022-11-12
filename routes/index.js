@@ -210,7 +210,18 @@ router.post('/newuser', function(req, res) {
         res.status(500).send(err);
       }
       res.status(200).json(oneUserPlant);
-    });;
-  })
+    });
+  });
+
+  //Get all updates by PlantID
+  router.get('/getupdates/:id', function(req, res) {
+    UpdatePlant.find({plantID: req.params.id}, (err, plantUpdates) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send(err);
+      }
+      res.status(200).json(plantUpdates);
+    });
+  });
   
   module.exports = router;
