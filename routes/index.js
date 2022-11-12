@@ -201,5 +201,16 @@ router.post('/newuser', function(req, res) {
       }
       })
   });
+
+  //Get a single userplant by PlantID
+  router.get('/oneuserplant/:id', function(req, res) {
+    UserPlant.findOne({plantID: req.params.id}, (err, oneUserPlant) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send(err);
+      }
+      res.status(200).json(oneUserPlant);
+    });;
+  })
   
   module.exports = router;
