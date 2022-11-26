@@ -14,7 +14,9 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
-app.use(cors(corsOptions));
+//Deployed version uses Azure to manage CORS. Uncomment this line if running locally.
+//app.use(cors(corsOptions));
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
