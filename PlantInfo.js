@@ -22,7 +22,7 @@ const PlantInfoSchema = new Schema({
     type: String,
   },
   climate: {
-    type: Number,
+    type: String,
   },
   tempmax: {
     type: { celsius: Number, fahrenheit: Number },
@@ -31,10 +31,10 @@ const PlantInfoSchema = new Schema({
     type: { celsius: Number, fahrenheit: Number },
   },
   ideallight: {
-    type: Number,
+    type: String,
   },
   toleratedlight: {
-    type: Number,
+    type: String,
   },
   watering: {
     type: String,
@@ -43,7 +43,7 @@ const PlantInfoSchema = new Schema({
     type: Array,
   },
   diseases: {
-    type: String,
+    type: Array,
   },
   use: {
     type: Array,
